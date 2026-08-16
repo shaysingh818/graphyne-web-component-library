@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-*/
+storybook-static/
+coverage/
+*.local
+.DS_Store
+*.log
+.turbo/
+
+*storybook.log

@@ -1,0 +1,30 @@
+{
+  "name": "graphyne-web-component-library",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reusable, publishable component library for Graphyne Studios. Components are authored as Vue SFCs and compiled to native custom elements (Web Components) so they can be consumed from any framework.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "build": "pnpm --filter \"./packages/**\" run build",
+    "test": "pnpm --filter \"./packages/**\" run test",
+    "test:watch": "pnpm --filter \"./packages/**\" run test:watch",
+    "typecheck": "pnpm --filter \"./packages/**\" run typecheck",
+    "lint": "eslint . --ext .ts,.vue",
+    "storybook": "pnpm --filter @graphyne/core run storybook",
+    "build-storybook": "pnpm --filter @graphyne/core run build-storybook",
+    "clean": "pnpm --filter \"./packages/**\" run clean"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "vue-demi"
+    ]
+  }
+}
