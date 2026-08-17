@@ -106,6 +106,32 @@ build bundles Vue in and compiles every SFC with `customElement: true`
 (styles get inlined into each element's shadow DOM instead of extracted to
 a shared stylesheet), so the elements are fully self-contained.
 
+## Styling
+
+[Tailwind CSS v4](https://tailwindcss.com/) is wired in via the
+[`@tailwindcss/vite`](https://www.npmjs.com/package/@tailwindcss/vite)
+plugin. The entry stylesheet is
+`packages/core/src/styles/tailwind.css` — add your `@theme` tokens and any
+shared `@layer` rules there.
+
+It's currently only wired into two places:
+
+- `vite.config.ts` (the plain Vue components build) — imported once from
+  `src/index.ts`, so it behaves like a normal global stylesheet.
+- `.storybook/main.ts` / `.storybook/preview.ts` — so utility classes
+  render correctly in the Storybook canvas.
+
+It is **not** wired into `vite.elements.config.ts` (the custom-elements
+build). Each custom element renders in its own shadow DOM, which a global
+Tailwind stylesheet doesn't reach — only CSS custom properties (like the
+ones Tailwind's `@theme` generates) inherit across the shadow boundary,
+plain utility rules don't. The straightforward fix, when custom-elements
+distribution is actually needed, is to author component styles with
+Tailwind's `@apply` inside each SFC's scoped `<style>` block rather than
+utility classes in the template — that compiles to concrete CSS scoped to
+that component, so it gets inlined into its shadow root like any other
+scoped style. Revisit this once the React/Svelte packages are underway.
+
 ## Testing
 
 Unit tests use [Vitest](https://vitest.dev/) with `@vue/test-utils` and a

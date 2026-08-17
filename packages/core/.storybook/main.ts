@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/vue3-vite';
+import tailwindcss from '@tailwindcss/vite';
 
 const config: StorybookConfig = {
   "stories": [
@@ -10,6 +11,11 @@ const config: StorybookConfig = {
     "@storybook/addon-docs",
     "@storybook/addon-onboarding"
   ],
-  "framework": "@storybook/vue3-vite"
+  "framework": "@storybook/vue3-vite",
+  async viteFinal(viteConfig) {
+    viteConfig.plugins = viteConfig.plugins ?? [];
+    viteConfig.plugins.push(tailwindcss());
+    return viteConfig;
+  }
 };
 export default config;

@@ -1,4 +1,7 @@
 import type { App } from "vue";
+import "./styles/tailwind.css";
+import "./styles/tokens.css";
+import "./styles/shared.css";
 import { GnButton } from "./components/GnButton";
 import { GnCard } from "./components/GnCard";
 

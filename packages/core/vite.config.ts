@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath, URL } from "node:url";
 
 /**
@@ -7,9 +8,14 @@ import { fileURLToPath, URL } from "node:url";
  * e.g. `import { GnButton } from '@graphyne/core'` inside a Vue app.
  * Vue is treated as a peer dependency (externalized) since the host
  * Vue app already provides the runtime.
+ *
+ * Tailwind runs here because this build's CSS is a normal page-level
+ * stylesheet (dist/style.css) — it is NOT applied to the custom-elements
+ * build (vite.elements.config.ts), since Tailwind's generated utility CSS
+ * doesn't cross into shadow DOM. See the "Styling" section in the README.
  */
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), tailwindcss()],
   build: {
     outDir: "dist",
     emptyOutDir: true,

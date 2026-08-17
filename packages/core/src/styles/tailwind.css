@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/*
+ * Add your shared design tokens here, e.g.:
+ *
+ * @theme {
+ *   --color-brand: #4f46e5;
+ *   --font-sans: "Inter", sans-serif;
+ * }
+ *
+ * and any custom @layer base / @layer components rules your existing
+ * stylesheet defines. This file is imported once, globally, by:
+ *  - src/index.ts        (the plain Vue components build)
+ *  - .storybook/preview.ts (the Storybook playground canvas)
+ */
