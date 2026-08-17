@@ -3,7 +3,7 @@ import { fn } from "storybook/test";
 import { GnButton } from "./index";
 
 const meta = {
-  title: "Components/GnButton",
+  title: "Buttons/GnButton",
   component: GnButton,
   tags: ["autodocs"],
   argTypes: {

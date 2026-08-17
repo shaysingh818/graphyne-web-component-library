@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { GnCard } from "./index";
-import { GnButton } from "../GnButton";
+import { GnButton } from "../../buttons/GnButton";
 
 const meta = {
-  title: "Components/GnCard",
+  title: "Layout/GnCard",
   component: GnCard,
   tags: ["autodocs"],
   argTypes: {

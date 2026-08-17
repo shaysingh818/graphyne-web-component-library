@@ -2,11 +2,11 @@ import type { App } from "vue";
 import "./styles/tailwind.css";
 import "./styles/tokens.css";
 import "./styles/shared.css";
-import { GnButton } from "./components/GnButton";
-import { GnCard } from "./components/GnCard";
+import { GnButton } from "./components/buttons";
+import { GnCard } from "./components/layout";
 
-export { GnButton } from "./components/GnButton";
-export { GnCard } from "./components/GnCard";
+export * from "./components/buttons";
+export * from "./components/layout";
 
 /**
  * Vue plugin for globally registering every Graphyne component at once:

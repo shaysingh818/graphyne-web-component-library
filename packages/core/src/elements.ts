@@ -1,6 +1,6 @@
 import { defineCustomElement } from "vue";
-import GnButton from "./components/GnButton/GnButton.vue";
-import GnCard from "./components/GnCard/GnCard.vue";
+import GnButton from "./components/buttons/GnButton/GnButton.vue";
+import GnCard from "./components/layout/GnCard/GnCard.vue";
 
 /**
  * Framework-agnostic custom element classes. Exported individually so

@@ -36,12 +36,15 @@ graphyne-web-component-library/
 │  └─ core/                     @graphyne/core — the component library
 │     ├─ src/
 │     │  ├─ components/
-│     │  │  ├─ GnButton/
-│     │  │  │  ├─ GnButton.vue          component
-│     │  │  │  ├─ GnButton.stories.ts   Storybook stories
-│     │  │  │  ├─ GnButton.test.ts      Vitest unit tests
-│     │  │  │  └─ index.ts              barrel export
-│     │  │  └─ GnCard/                  same shape as above
+│     │  │  ├─ buttons/
+│     │  │  │  └─ GnButton/
+│     │  │  │     ├─ GnButton.vue          component
+│     │  │  │     ├─ GnButton.stories.ts   Storybook stories
+│     │  │  │     ├─ GnButton.test.ts      Vitest unit tests
+│     │  │  │     └─ index.ts              barrel export
+│     │  │  ├─ layout/
+│     │  │  │  └─ GnCard/                  same shape as GnButton
+│     │  │  └─ index.ts (per category)     re-exports every component in it
 │     │  ├─ index.ts             Vue entry point (+ install() plugin)
 │     │  └─ elements.ts          custom-elements entry point
 │     ├─ vite.config.ts          builds the Vue components bundle
@@ -57,27 +60,50 @@ later (see [Future frameworks](#future-frameworks-react-svelte-)).
 
 ## Authoring a component
 
-Every component lives in its own folder under
-`packages/core/src/components/` with four files: the `.vue` component, a
-`.stories.ts` file, a `.test.ts` file, and an `index.ts` barrel export. Look
-at `GnButton/` and `GnCard/` as templates — they demonstrate typed props
-with defaults, a namespaced custom event (`gn-click`), and slot usage
-(default + named slots).
+Components are grouped into category folders under
+`packages/core/src/components/` — `buttons/`, `layout/`, and so on — so the
+source tree stays organized as the library grows instead of a single flat
+folder of unrelated components. Within a category, every component still
+gets its own folder with four files: the `.vue` component, a `.stories.ts`
+file, a `.test.ts` file, and an `index.ts` barrel export. Look at
+`buttons/GnButton/` and `layout/GnCard/` as templates — they demonstrate
+typed props with defaults, a namespaced custom event (`gn-click`), and slot
+usage (default + named slots).
 
-To add a new component:
+Each category folder also has its own `index.ts` that re-exports everything
+in it (e.g. `components/buttons/index.ts` does `export * from "./GnButton"`)
+— that's what `src/index.ts` imports from, so adding a new component to an
+existing category never requires touching anything outside that category
+folder.
 
-1. Create `packages/core/src/components/MyThing/MyThing.vue`.
-2. Add `packages/core/src/components/MyThing/index.ts` that re-exports it.
-3. Export it from `packages/core/src/index.ts` (and add it to the
-   `install()` plugin if it should be globally registerable).
+To add a new component to an existing category (e.g. a second button):
+
+1. Create `packages/core/src/components/buttons/MyThing/MyThing.vue`.
+2. Add `packages/core/src/components/buttons/MyThing/index.ts` that
+   re-exports it.
+3. Add `export * from "./MyThing";` to
+   `packages/core/src/components/buttons/index.ts`.
 4. Register it in `packages/core/src/elements.ts` if it should also ship as
    a custom element (almost everything should).
-5. Add a `.stories.ts` file so it shows up in Storybook, and a `.test.ts`
-   file with Vitest + `@vue/test-utils` coverage.
+5. Add a `.stories.ts` file (`title: "Buttons/MyThing"` — see
+   [Storybook](#storybook-the-playground) below) and a `.test.ts` file with
+   Vitest + `@vue/test-utils` coverage.
+6. If it should be globally registerable via the `install()` Vue plugin,
+   add it to `packages/core/src/index.ts`.
+
+To start a brand-new category (e.g. `navigation`):
+
+1. Create `packages/core/src/components/navigation/`.
+2. Add your first component inside it, following the same folder shape as
+   above.
+3. Add `packages/core/src/components/navigation/index.ts` re-exporting it.
+4. Add `export * from "./components/navigation";` to
+   `packages/core/src/index.ts`.
 
 Naming convention: components are prefixed `Gn` (short for Graphyne) in Vue
 land, and compile down to `gn-*` custom element tag names (e.g. `GnButton`
-→ `<gn-button>`).
+→ `<gn-button>`). Category folder names are lowercase and plural where it
+reads naturally (`buttons`, not `Buttons`/`button`).
 
 ## Two build outputs, one source
 
@@ -155,6 +181,11 @@ pnpm build-storybook    # static build, e.g. for deploying docs
 
 Storybook config lives in `packages/core/.storybook/`. Add a `.stories.ts`
 file next to any component and it's picked up automatically.
+
+The Storybook sidebar is grouped by each story's `title` field, not by file
+location — `title: "Buttons/GnButton"` puts it under a "Buttons" group in
+the sidebar. By convention that title should match the component's category
+folder name (capitalized), so the sidebar mirrors the source layout.
 
 ## Publishing
 
