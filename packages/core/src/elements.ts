@@ -1,6 +1,8 @@
 import { defineCustomElement } from "vue";
 import GnButton from "./components/buttons/GnButton/GnButton.vue";
+import GnIconButton from "./components/buttons/GnIconButton/GnIconButton.vue";
 import GnCard from "./components/layout/GnCard/GnCard.vue";
+import GnFormInputField from "./components/forms/GnFormInputField/GnFormInputField.vue";
 
 /**
  * Framework-agnostic custom element classes. Exported individually so
@@ -13,11 +15,15 @@ import GnCard from "./components/layout/GnCard/GnCard.vue";
  * ```
  */
 export const GnButtonElement = defineCustomElement(GnButton);
+export const GnIconButtonElement = defineCustomElement(GnIconButton);
 export const GnCardElement = defineCustomElement(GnCard);
+export const GnFormInputFieldElement = defineCustomElement(GnFormInputField);
 
 const registry: Record<string, CustomElementConstructor> = {
   "gn-button": GnButtonElement,
-  "gn-card": GnCardElement
+  "gn-icon-button": GnIconButtonElement,
+  "gn-card": GnCardElement,
+  "gn-form-input-field": GnFormInputFieldElement
 };
 
 /**
