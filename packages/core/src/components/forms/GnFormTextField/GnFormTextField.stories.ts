@@ -1,45 +1,42 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { fn } from "storybook/test";
-import { GnFormInputField } from "./index";
+import { GnFormTextField } from "./index";
 
 const meta = {
-  title: "Forms/GnFormInputField",
-  component: GnFormInputField,
+  title: "Forms/GnFormTextField",
+  component: GnFormTextField,
   tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
         component:
-          "A labeled text input with `v-model` support and an optional inline error message. Colors are split into independent overrides rather than a single accent: `color` only affects the focus ring, while `backgroundColor`, `textColor`, and `borderColor` restyle the field itself."
+          "A labeled multi-line textarea with `v-model` support and an optional inline error message. Mirrors GnFormInputField's API and color-override conventions, plus a `rows` prop for its default visible height."
       }
     }
   },
   argTypes: {
-    type: {
-      control: "select",
-      options: ["text", "email", "password", "number", "search", "tel", "url"]
-    },
+    rows: { control: "number" },
     disabled: { control: "boolean" },
     label: { control: "text" },
     placeholder: { control: "text" },
     error: { control: "text" }
   },
   args: {
-    type: "text",
+    rows: 4,
     disabled: false,
-    label: "Email address",
-    placeholder: "you@example.com",
+    label: "Bio",
+    placeholder: "Tell us about yourself…",
     "onUpdate:modelValue": fn(),
     "onGn-update": fn()
   },
   render: (args) => ({
-    components: { GnFormInputField },
+    components: { GnFormTextField },
     setup() {
       return { args };
     },
-    template: `<GnFormInputField v-bind="args" />`
+    template: `<GnFormTextField v-bind="args" />`
   })
-} satisfies Meta<typeof GnFormInputField>;
+} satisfies Meta<typeof GnFormTextField>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -48,14 +45,14 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "An empty field with a label and placeholder."
+        story: "An empty field with a label, placeholder, and the default 4 rows."
       }
     }
   }
 };
 
 export const WithValue: Story = {
-  args: { modelValue: "jane@example.com" },
+  args: { modelValue: "Long-time fan of well-typed component libraries." },
   parameters: {
     docs: {
       description: {
@@ -66,7 +63,7 @@ export const WithValue: Story = {
 };
 
 export const Disabled: Story = {
-  args: { disabled: true, modelValue: "jane@example.com" },
+  args: { disabled: true, modelValue: "Long-time fan of well-typed component libraries." },
   parameters: {
     docs: {
       description: {
@@ -77,7 +74,7 @@ export const Disabled: Story = {
 };
 
 export const WithError: Story = {
-  args: { modelValue: "not-an-email", error: "Enter a valid email address." },
+  args: { modelValue: "", error: "This field is required." },
   parameters: {
     docs: {
       description: {
@@ -98,10 +95,10 @@ export const CustomAccent: Story = {
   }
 };
 
-export const DarkSearchField: Story = {
+export const DarkTextField: Story = {
   args: {
     label: undefined,
-    placeholder: "Search…",
+    placeholder: "Write something…",
     backgroundColor: "rgb(28, 25, 23)",
     textColor: "#f97316",
     borderColor: "transparent"
@@ -110,6 +107,17 @@ export const DarkSearchField: Story = {
     docs: {
       description: {
         story: "A dark, borderless field reproduced with `backgroundColor`, `textColor`, and `borderColor=\"transparent\"`, and no label."
+      }
+    }
+  }
+};
+
+export const MoreRows: Story = {
+  args: { rows: 8 },
+  parameters: {
+    docs: {
+      description: {
+        story: "`rows` sets the textarea's default visible height; it can still be resized vertically by the user."
       }
     }
   }

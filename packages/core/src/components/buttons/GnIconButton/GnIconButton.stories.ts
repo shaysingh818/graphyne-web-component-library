@@ -20,6 +20,14 @@ const meta = {
   title: "Buttons/GnIconButton",
   component: GnIconButton,
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A circular, icon-only button. The icon is provided via the default slot — an inline SVG, an icon-font `<i>`, a `<font-awesome-icon>`, whatever the consumer already uses — rather than a hardcoded icon prop, so the component stays framework- and library-agnostic once compiled to a custom element. Since there's no visible text, `label` is required and applied as `aria-label`."
+      }
+    }
+  },
   argTypes: {
     variant: {
       control: "select",
@@ -52,31 +60,80 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: { variant: "primary" }
+  args: { variant: "primary" },
+  parameters: {
+    docs: {
+      description: {
+        story: "The default, high-emphasis variant — solid accent background."
+      }
+    }
+  }
 };
 
 export const Secondary: Story = {
-  args: { variant: "secondary" }
+  args: { variant: "secondary" },
+  parameters: {
+    docs: {
+      description: {
+        story: "A lower-emphasis variant — tinted background, no solid fill."
+      }
+    }
+  }
 };
 
 export const Ghost: Story = {
-  args: { variant: "ghost" }
+  args: { variant: "ghost" },
+  parameters: {
+    docs: {
+      description: {
+        story: "The lowest-emphasis variant — no background or border until hovered."
+      }
+    }
+  }
 };
 
 export const Disabled: Story = {
-  args: { disabled: true }
+  args: { disabled: true },
+  parameters: {
+    docs: {
+      description: {
+        story: "Dims the button and prevents `gn-click` from firing, regardless of variant."
+      }
+    }
+  }
 };
 
 export const Small: Story = {
-  args: { size: "sm" }
+  args: { size: "sm" },
+  parameters: {
+    docs: {
+      description: {
+        story: "Scales both the button diameter and the slotted icon down together."
+      }
+    }
+  }
 };
 
 export const Medium: Story = {
-  args: { size: "md" }
+  args: { size: "md" },
+  parameters: {
+    docs: {
+      description: {
+        story: "The default size."
+      }
+    }
+  }
 };
 
 export const Large: Story = {
-  args: { size: "lg" }
+  args: { size: "lg" },
+  parameters: {
+    docs: {
+      description: {
+        story: "Scales both the button diameter and the slotted icon up together."
+      }
+    }
+  }
 };
 
 export const WithFontAwesome: Story = {
@@ -86,5 +143,13 @@ export const WithFontAwesome: Story = {
       return { args };
     },
     template: `<GnIconButton v-bind="args"><font-awesome-icon icon="trash" /></GnIconButton>`
-  })
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Since the icon is just the default slot, any icon library works — here a `<font-awesome-icon>` is passed in instead of an inline SVG."
+      }
+    }
+  }
 };

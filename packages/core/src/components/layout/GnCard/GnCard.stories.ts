@@ -6,6 +6,14 @@ const meta = {
   title: "Layout/GnCard",
   component: GnCard,
   tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A simple bordered container with an optional title and an optional named `footer` slot, for grouping related content — settings sections, form panels, list items, etc."
+      }
+    }
+  },
   argTypes: {
     title: { control: "text" }
   },
@@ -28,7 +36,14 @@ export const Default: Story = {
         <p>Body content goes here. Any markup or nested components can go in the default slot.</p>
       </GnCard>
     `
-  })
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: "A titled card with only body content — no footer."
+      }
+    }
+  }
 };
 
 export const WithFooter: Story = {
@@ -46,7 +61,14 @@ export const WithFooter: Story = {
         </template>
       </GnCard>
     `
-  })
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: "The named `footer` slot renders below the body, separated by a divider — typically used for action buttons."
+      }
+    }
+  }
 };
 
 export const Untitled: Story = {
@@ -57,5 +79,12 @@ export const Untitled: Story = {
       return { args };
     },
     template: `<GnCard v-bind="args">A card without a header.</GnCard>`
-  })
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: "Omitting `title` skips the header entirely rather than rendering an empty one."
+      }
+    }
+  }
 };
