@@ -6,7 +6,7 @@ import "./styles/shared.css";
 import { GnButton, GnIconButton } from "./components/buttons";
 import { GnCard } from "./components/layout";
 import { GnFormInputField, GnFormDropDownField, GnSearchFormField, GnFormTextField } from "./components/forms";
-import { GnNavigationItem } from "./components/navigation";
+import { GnNavigationItem, GnNavigationHeader, GnNavigationBar } from "./components/navigation";
 
 export * from "./components/buttons";
 export * from "./components/layout";
@@ -33,5 +33,7 @@ export default {
     app.component("GnSearchFormField", GnSearchFormField);
     app.component("GnFormTextField", GnFormTextField);
     app.component("GnNavigationItem", GnNavigationItem);
+    app.component("GnNavigationHeader", GnNavigationHeader);
+    app.component("GnNavigationBar", GnNavigationBar);
   }
 };
