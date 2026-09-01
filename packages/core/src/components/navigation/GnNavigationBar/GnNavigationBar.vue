@@ -64,7 +64,7 @@ const style = computed(() => {
   --gn-nav-bar-background: transparent;
   --gn-nav-bar-border: transparent;
   display: flex;
-  gap: 1.5rem;
+  gap: 2.0rem;
   background-color: var(--gn-nav-bar-background);
   border: 1px solid var(--gn-nav-bar-border);
   font-family: inherit;
@@ -73,6 +73,8 @@ const style = computed(() => {
 .gn-navigation-bar--col {
   flex-direction: column;
   align-items: stretch;
+  width: fit-content;
+  height: 100%;
   padding: 1rem;
 }
 
@@ -85,7 +87,7 @@ const style = computed(() => {
 .gn-navigation-bar__items {
   display: flex;
   flex: 1;
-  gap: 0.5rem;
+  gap: 1.0rem;
 }
 
 .gn-navigation-bar--col .gn-navigation-bar__items {
@@ -96,11 +98,19 @@ const style = computed(() => {
   flex-direction: row;
 }
 
+.gn-navigation-bar__trailing {
+  display: flex;
+  align-items: center;
+  gap: 1.0rem;
+}
+
 .gn-navigation-bar--col .gn-navigation-bar__trailing {
+  flex-direction: column;
   margin-top: auto;
 }
 
 .gn-navigation-bar--row .gn-navigation-bar__trailing {
+  flex-direction: row;
   margin-left: auto;
 }
 </style>
