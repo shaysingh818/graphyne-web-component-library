@@ -8,12 +8,14 @@ import { GnCard } from "./components/layout";
 import { GnFormInputField, GnFormDropDownField, GnSearchFormField, GnFormTextField } from "./components/forms";
 import { GnNavigationItem, GnNavigationHeader, GnNavigationBar, GnTabNavigationBar, GnTabNavigationItem, GnBackBar } from "./components/navigation";
 import { GnBarChart, GnDoughnutChart, GnLineChart, GnPieChart } from "./components/charts";
+import { GnTag } from "./components/display";
 
 export * from "./components/buttons";
 export * from "./components/layout";
 export * from "./components/forms";
 export * from "./components/navigation";
 export * from "./components/charts";
+export * from "./components/display"; 
 
 /**
  * Vue plugin for globally registering every Graphyne component at once:
@@ -44,5 +46,6 @@ export default {
     app.component("GnDoughnutChart", GnDoughnutChart);
     app.component("GnLineChart", GnLineChart);
     app.component("GnPieChart", GnPieChart);
+    app.component("GnTag", GnTag); 
   }
 };

@@ -26,7 +26,6 @@ const meta = {
       { label: "Option C", value: "c" },
     ],
     "onUpdate:modelValue": fn(),
-    "gn-update": fn()
   },
   render: (args) => ({
     components: { GnFormDropDownField },

@@ -34,13 +34,9 @@
    }
  );
 
-defineEmits<{
-  /** Fires on click, unless the button is disabled. */
-  "gn-click": [payload: MouseEvent];
-}>();
 
 const style = computed(() =>
-  props.color ? { "--gn-button-accent": props.color } : undefined
+  props.color ? { "--gn-tag-accent": props.color } : undefined
 );
 </script>
 
@@ -55,10 +51,11 @@ const style = computed(() =>
 
 <style scoped>
 .tag {
-  border-radius: 5px;
-  background-color: #f97316;
-  padding: 5px;
-  white-space: nowrap;
+    --gn-tag-accent: #f97316;
+    border-radius: 5px;
+    background-color: var(--gn-tag-accent);
+    padding: 5px;
+    white-space: nowrap;
 }
 
 p {

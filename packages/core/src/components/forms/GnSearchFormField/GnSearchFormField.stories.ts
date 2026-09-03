@@ -25,8 +25,6 @@ const meta = {
     label: "Search",
     placeholder: "Search…",
     "onUpdate:modelValue": fn(),
-    "gn-update": fn(),
-    "gn-search": fn()
   },
   render: (args) => ({
     components: { GnSearchFormField },

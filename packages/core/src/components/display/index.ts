@@ -1,1 +1,1 @@
-export { default as GnTag } from "./GnTag.vue";
+export * from "./GnTag";
