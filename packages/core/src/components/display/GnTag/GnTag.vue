@@ -18,13 +18,19 @@
      /** Disables the button and prevents the click event from firing. */
      disabled?: boolean;
      /** Overrides the accent color used by all variants (any valid CSS color). */
-     color?: string;
+     color?: string;     
+     /** Height of tag component */
+     width?: string;     
+     /** Width of tag component. */
+     height?: string;
    }>(),
    {
      label: "tag",
      variant: "primary",
      disabled: false,
-     color: undefined
+     color: undefined,
+     width: "10px",
+     height: "10px"
    }
  );
 
@@ -39,5 +45,25 @@ const style = computed(() =>
 </script>
 
 <template>
-
+<div
+  class="tag"
+  :style="{width: width, height: height }"
+>
+  <p>{{ label }}</p>
+</div>
 </template>
+
+<style scoped>
+.tag {
+  border-radius: 5px;
+  background-color: #f97316;
+  padding: 5px;
+  white-space: nowrap;
+}
+
+p {
+  font-weight: normal;
+  font-size: 10px;
+  color: white;
+}
+</style>
