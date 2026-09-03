@@ -9,16 +9,16 @@
  */
  import { computed } from "vue";
  
- const props = withDefaults(
-   defineProps<{
-     /** Visual style of the button. */
-     variant?: "primary" | "secondary" | "ghost";
-     /** Disables the button and prevents the click event from firing. */
-     disabled?: boolean;
-     /** Overrides the accent color used by all variants (any valid CSS color). */
-     color?: string;
-   }>(),
-   {
+const props = withDefaults(
+  defineProps<{
+    /** Visual style of the button. */
+    variant?: "primary" | "secondary" | "ghost";
+    /** Disables the button and prevents the click event from firing. */
+    disabled?: boolean;
+    /** Overrides the accent color used by all variants (any valid CSS color). */
+    color?: string;
+  }>(),
+  {
      variant: "primary",
      disabled: false,
      color: undefined
