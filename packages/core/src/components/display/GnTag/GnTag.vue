@@ -1,39 +1,36 @@
 <script setup lang="ts">
 /**
- * GnButton
+ * GnTag
  *
- * A minimal example component demonstrating the pattern every Graphyne
- * component should follow: typed props with defaults, a namespaced custom
- * event (`gn-click`) so it dispatches cleanly as a native CustomEvent when
- * compiled to a custom element, and a default slot for content.
+ * A small label/badge for showing metadata associated with content (a
+ * category, a status, a count). Like GnButton, there's no width/height
+ * prop — the tag sizes itself to fit its `label` via padding, the same way
+ * GnButton sizes itself to its slot content. An earlier version of this
+ * component had a `width`/`height` prop pair (default "10px"/"10px")
+ * force-applied via inline `:style`, which clipped/overflowed almost any
+ * real label — that's what was actually going on when tags looked
+ * "messed up". The `color` override was also silently non-functional: the
+ * template's `:style` bound a literal `{width, height}` object instead of
+ * the `style` computed value that actually holds `--gn-tag-accent`, so
+ * `color` was a dead prop no matter what was passed in.
  */
- import { computed } from "vue";
- 
- const props = withDefaults(
-   defineProps<{ 
-     /** Overrides the accent color used by all variants (any valid CSS color). */
-     label?: string;
-     /** Visual style of the button. */
-     variant?: "primary" | "secondary" | "ghost";
-     /** Disables the button and prevents the click event from firing. */
-     disabled?: boolean;
-     /** Overrides the accent color used by all variants (any valid CSS color). */
-     color?: string;     
-     /** Height of tag component */
-     width?: string;     
-     /** Width of tag component. */
-     height?: string;
-   }>(),
-   {
-     label: "tag",
-     variant: "primary",
-     disabled: false,
-     color: undefined,
-     width: "10px",
-     height: "10px"
-   }
- );
+import { computed } from "vue";
 
+const props = withDefaults(
+  defineProps<{
+    /** Visible text. */
+    label?: string;
+    /** Visual style of the tag. */
+    variant?: "primary" | "secondary";
+    /** Overrides the accent color used by all variants (any valid CSS color). */
+    color?: string;
+  }>(),
+  {
+    label: "tag",
+    variant: "primary",
+    color: undefined
+  }
+);
 
 const style = computed(() =>
   props.color ? { "--gn-tag-accent": props.color } : undefined
@@ -42,25 +39,50 @@ const style = computed(() =>
 
 <template>
 <div
-  class="tag"
-  :style="{width: width, height: height }"
+  class="gn-tag"
+  :class="[`gn-tag--${variant}`]"
+  :style="style"
 >
   <p>{{ label }}</p>
 </div>
 </template>
 
 <style scoped>
-.tag {
+.gn-tag {
     --gn-tag-accent: #f97316;
+    /*
+     * inline-flex, not flex — a block-level flex container stretches to
+     * fill its containing block's width in a normal block layout context
+     * (it only happened to shrink-wrap to its label inside GnListTile's
+     * tags row because that row is itself a flex container, where items
+     * size to content on the main axis by default; standalone, "flex"
+     * stretched the tag across nearly the full canvas width instead).
+     * Every other self-sizing element in this library — GnIconButton,
+     * GnTabNavigationItem, etc. — uses inline-flex for this exact reason.
+     */
+    display: inline-flex;
     border-radius: 5px;
-    background-color: var(--gn-tag-accent);
     padding: 5px;
     white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+.gn-tag--primary { 
+    background-color:  var(--gn-tag-accent);
+    border-color: var(--gn-tag-accent);
+    color: #ffffff;
+}
+
+.gn-tag--secondary {
+  background-color: color-mix(in srgb, var(--gn-tag-accent) 30%, white);
+  border-color: color-mix(in srgb, var(--gn-tag-accent) 35%, white);
+  color: color-mix(in srgb, var(--gn-tag-accent) 70%, black);
 }
 
 p {
-  font-weight: normal;
+  font-weight: bold;
   font-size: 10px;
-  color: white;
 }
 </style>

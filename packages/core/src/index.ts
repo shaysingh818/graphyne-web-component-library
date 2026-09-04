@@ -4,18 +4,20 @@ import "./styles/tokens.css";
 import "./styles/shared.css";
 
 import { GnButton, GnIconButton } from "./components/buttons";
-import { GnCard } from "./components/layout";
+import { GnCard, GnListTile } from "./components/layout";
 import { GnFormInputField, GnFormDropDownField, GnSearchFormField, GnFormTextField } from "./components/forms";
 import { GnNavigationItem, GnNavigationHeader, GnNavigationBar, GnTabNavigationBar, GnTabNavigationItem, GnBackBar } from "./components/navigation";
 import { GnBarChart, GnDoughnutChart, GnLineChart, GnPieChart } from "./components/charts";
 import { GnTag } from "./components/display";
+import { GnConfirmDialog } from "./components/overlays";
 
 export * from "./components/buttons";
 export * from "./components/layout";
 export * from "./components/forms";
 export * from "./components/navigation";
 export * from "./components/charts";
-export * from "./components/display"; 
+export * from "./components/display";
+export * from "./components/overlays";
 
 /**
  * Vue plugin for globally registering every Graphyne component at once:
@@ -32,6 +34,7 @@ export default {
     app.component("GnButton", GnButton);
     app.component("GnIconButton", GnIconButton);
     app.component("GnCard", GnCard);
+    app.component("GnListTile", GnListTile);
     app.component("GnFormInputField", GnFormInputField);
     app.component("GnFormDropDownField", GnFormDropDownField);
     app.component("GnSearchFormField", GnSearchFormField);
@@ -46,6 +49,7 @@ export default {
     app.component("GnDoughnutChart", GnDoughnutChart);
     app.component("GnLineChart", GnLineChart);
     app.component("GnPieChart", GnPieChart);
-    app.component("GnTag", GnTag); 
+    app.component("GnTag", GnTag);
+    app.component("GnConfirmDialog", GnConfirmDialog);
   }
 };

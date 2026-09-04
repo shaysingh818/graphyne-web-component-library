@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
-import { fn } from "storybook/test";
 import { GnTag } from "./index";
 
 const meta = {
@@ -10,27 +9,26 @@ const meta = {
     docs: {
       description: {
         component:
-          "A standard tag component for showing badges/tags associated with content. Includes styling for pinrary, secondary or ghost styling."
+          "A small label/badge for showing metadata associated with content (a category, a status, a count). Sizes itself to fit its label — there's no width/height prop, the same way GnButton has none."
       }
     }
   },
   argTypes: {
+    label: { control: "text" },
     variant: {
       control: "select",
-      options: ["primary", "secondary", "ghost"]
-    },
-    disabled: { control: "boolean" }
+      options: ["primary", "secondary"]
+    }
   },
   args: {
-    variant: "primary",
-    disabled: false
+    label: "Biology"
   },
   render: (args) => ({
     components: { GnTag },
     setup() {
       return { args };
     },
-    template: `<GnTag v-bind="args">Save changes</GnTag>`
+    template: `<GnTag v-bind="args" />`
   })
 } satisfies Meta<typeof GnTag>;
 
@@ -38,13 +36,44 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: {
-    variant: "primary"
-  },
+  args: { variant: "primary" },
   parameters: {
     docs: {
       description: {
-        story: "The default, high-emphasis variant — solid accent background. Use for the main action in a view or form."
+        story: "The default, high-emphasis variant — solid accent background."
+      }
+    }
+  }
+};
+
+export const Secondary: Story = {
+  args: { variant: "secondary" },
+  parameters: {
+    docs: {
+      description: {
+        story: "A lower-emphasis variant — a tinted background instead of a solid one."
+      }
+    }
+  }
+};
+
+export const LongLabel: Story = {
+  args: { label: "Ordered Sequence" },
+  parameters: {
+    docs: {
+      description: {
+        story: "The tag grows to fit its label rather than clipping or overflowing it — there's no fixed width/height to fight against."
+      }
+    }
+  }
+};
+
+export const CustomColor: Story = {
+  args: { label: "Exam", color: "#0ea5e9" },
+  parameters: {
+    docs: {
+      description: {
+        story: "color overrides the accent used by both variants (any valid CSS color)."
       }
     }
   }

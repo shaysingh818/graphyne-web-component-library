@@ -50,7 +50,7 @@ const style = computed(() =>
 
 <style scoped>
 .gn-button {
-    --gn-button-accent: #F97316;
+  --gn-button-accent: #F97316;
   font-family: inherit;
   font-size: 0.9375rem;
   font-weight: 600;
