@@ -4,6 +4,26 @@
   "description": "Graphyne Web Components — authored as Vue 3 SFCs, published as framework-agnostic custom elements.",
   "type": "module",
   "license": "MIT",
+  "author": "Shay Singh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaysingh818/graphyne-web-component-library.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://shaysingh818.github.io/graphyne-web-component-library/",
+  "bugs": {
+    "url": "https://github.com/shaysingh818/graphyne-web-component-library/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "web-components",
+    "custom-elements",
+    "component-library"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist"
   ],
