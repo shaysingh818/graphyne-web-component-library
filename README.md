@@ -189,17 +189,75 @@ folder name (capitalized), so the sidebar mirrors the source layout.
 
 ## Publishing
 
-`packages/web-components` builds to `packages/web-components/dist/` with proper `exports`,
-`types`, and a `peerDependencies` entry for `vue`. Before publishing for
-real:
+`@graphyne/web-components` is published to the public npm registry under the
+`@graphyne` org/scope. `packages/web-components` builds to
+`packages/web-components/dist/` with proper `exports`, `types`, and a
+`peerDependencies` entry for `vue`.
 
-- Decide on and reserve an actual npm scope/org (this scaffold uses
-  `@graphyne` as a placeholder — update the `name` field in
-  `packages/web-components/package.json` if that's not the final name).
-- Consider adding [Changesets](https://github.com/changesets/changesets) for
-  versioning and changelogs once there's more than one package to publish.
-- `pnpm --filter @graphyne/web-components publish` once logged in to npm (`npm login`)
-  and the package name/version are finalized.
+### Releasing a new version
+
+Releases are triggered by **publishing a GitHub Release**, not by pushing a
+tag directly — [`.github/workflows/publish.yml`](.github/workflows/publish.yml) runs test → typecheck → build →
+`npm publish` in CI only when a Release is published. A plain `git push
+--tags` does **not** trigger it. This keeps releases a deliberate action
+taken against `main` after changes have already been merged, rather than
+something any tag push can accidentally kick off.
+
+```bash
+# 1. Land your changes the normal way: branch, PR, merge to main.
+
+# 2. Once on main, bump the version (in its own commit/PR, or as part of
+#    the merge — either is fine):
+cd packages/web-components
+npm version patch   # or minor / major — bumps package.json's version
+
+# npm version's git auto-tagging doesn't work in this environment (it logs
+# "Not tagging: not in a git repo or no git cmd" even though git works fine
+# in the shell) — so it only bumps the version, it does NOT commit or tag.
+# Do that part manually:
+cd ../..
+git add packages/web-components/package.json
+git commit -m "chore: release @graphyne/web-components v<version>"
+git push origin main
+
+# 3. Create and publish a GitHub Release whose tag matches the version —
+#    this is what actually fires the workflow:
+gh release create v<version> --target main --generate-notes
+```
+
+(`--target main` creates the `v<version>` tag on main's current tip as part
+of creating the release, so there's no separate manual `git tag`/`git push
+<tag>` step here — unlike a plain tag push, `gh release create` publishes
+the release immediately by default, firing the workflow right away.)
+
+Then watch the run: `gh run list --workflow=publish.yml` or the repo's
+**Actions** tab.
+
+### Auth: why there's no npm login/OIDC step in CI
+
+CI publishes using an **npm granular access token** stored as the `NPM_TOKEN`
+repository secret (Settings → Secrets and variables → Actions), read via
+`NODE_AUTH_TOKEN` in the publish step. Two things about that token that
+aren't obvious from the npm UI:
+
+- It must be created with **"bypass 2FA"** enabled, or every publish
+  (local or CI) 403s with `Two-factor authentication or granular access
+  token with bypass 2fa enabled is required to publish packages` — a
+  plain granular token isn't enough on its own.
+- **npm Trusted Publishing (OIDC)** was considered instead, since it needs
+  no stored token at all — but npm requires account-level two-factor
+  authentication to be enabled before you can configure a Trusted
+  Publisher, which isn't set up on this account (2FA app pairing has been
+  unreliable in this environment). The token approach above is the
+  intentional fallback, not a placeholder — don't "upgrade" this to OIDC
+  without confirming account 2FA is actually working first.
+
+For **local** manual publishes (`pnpm --filter @graphyne/web-components publish`),
+the same token needs to be the active credential in `~/.npmrc`
+(`npm config set //registry.npmjs.org/:_authToken=...`) — a stale token
+left over from `npm login` will pass `npm whoami` but still fail on
+publish with the same 2FA error, since `whoami` doesn't need the elevated
+permission.
 
 ## Future frameworks (React, Svelte, …)
 

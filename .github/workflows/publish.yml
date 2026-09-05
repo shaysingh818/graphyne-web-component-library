@@ -1,13 +1,19 @@
-# Publishes @graphyne/web-components to npm whenever a version tag (v*, e.g.
-# v0.1.0) is pushed. Requires an NPM_TOKEN secret (Settings → Secrets and
-# variables → Actions → New repository secret) holding an npm "Automation"
-# access token for the account/org that owns the @graphyne scope.
+# Publishes @graphyne/web-components to npm whenever a GitHub Release is
+# published. Requires an NPM_TOKEN secret (Settings → Secrets and variables →
+# Actions → New repository secret) holding an npm "Automation" access token
+# for the account/org that owns the @graphyne scope.
+#
+# Release flow: land changes on a branch, PR into main as usual, bump the
+# version in packages/web-components/package.json as part of that PR (or a
+# follow-up one) — then, once it's on main, create a GitHub Release whose
+# tag matches the version (e.g. `gh release create v0.1.3 --target main`,
+# or Releases → Draft a new release in the UI). Publishing that release is
+# what fires this workflow — a plain `git push --tags` no longer does.
 name: Publish @graphyne/web-components to npm
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types: [published]
 
 jobs:
   publish:
