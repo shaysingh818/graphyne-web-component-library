@@ -75,8 +75,9 @@ function selectItem(value: string) {
 </script>
 
 <template>
-    <div class="flex flex-col gap-2" :style="style"> 
-        <button :popovertarget="`gn-dropdown-list-${inputId}`">{{ selectedLabel }} </button>
+    <div class="flex flex-col gap-2" :style="style">
+        <label v-if="label" :for="inputId">{{ label }}</label>
+        <button :id="inputId" :popovertarget="`gn-dropdown-list-${inputId}`">{{ selectedLabel }} </button>
         <div class="gap-6" :id="`gn-dropdown-list-${inputId}`" popover role="listbox" style="padding: 15px;">
             <p
               v-for="option in options"
@@ -91,6 +92,13 @@ function selectItem(value: string) {
 </template>
 
 <style scoped>
+
+label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #374151;
+}
 
 button {
     anchor-name: var(--gn-dropdown-anchor-name);
