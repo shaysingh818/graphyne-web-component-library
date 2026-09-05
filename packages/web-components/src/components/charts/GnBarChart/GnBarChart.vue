@@ -6,7 +6,7 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 // new instance mounts) so registering these chart.js elements happens
 // exactly once per page, no matter how many GnBarChart instances exist.
 // Same reasoning as the useId() + module-scope counter pattern documented
-// in packages/core/CLAUDE.md.
+// in packages/web-components/CLAUDE.md.
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title);
 </script>
 
@@ -23,7 +23,7 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title)
  *   supplied through a slot. A chart's rendering engine isn't swappable
  *   decoration, it IS the component's function, and there's no slot
  *   equivalent for "render a bar chart." So chart.js and vue-chartjs are
- *   real `dependencies` of @graphyne/core (its first runtime dependency
+ *   real `dependencies` of @graphyne/web-components (its first runtime dependency
  *   beyond the `vue` peerDependency), not devDependencies.
  * - `labels` and `data` are both required, with no sample defaults. A
  *   placeholder array of fake numbers baked into the component (as the

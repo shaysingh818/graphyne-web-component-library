@@ -1,8 +1,8 @@
-# Publishes @graphyne/core to npm whenever a version tag (v*, e.g. v0.1.0)
-# is pushed. Requires an NPM_TOKEN secret (Settings → Secrets and variables →
-# Actions → New repository secret) holding an npm "Automation" access token
-# for the account/org that owns the @graphyne scope.
-name: Publish @graphyne/core to npm
+# Publishes @graphyne/web-components to npm whenever a version tag (v*, e.g.
+# v0.1.0) is pushed. Requires an NPM_TOKEN secret (Settings → Secrets and
+# variables → Actions → New repository secret) holding an npm "Automation"
+# access token for the account/org that owns the @graphyne scope.
+name: Publish @graphyne/web-components to npm
 
 on:
   push:
@@ -32,15 +32,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Test
-        run: pnpm --filter @graphyne/core run test
+        run: pnpm --filter @graphyne/web-components run test
 
       - name: Typecheck
-        run: pnpm --filter @graphyne/core run typecheck
+        run: pnpm --filter @graphyne/web-components run typecheck
 
       - name: Build
-        run: pnpm --filter @graphyne/core run build
+        run: pnpm --filter @graphyne/web-components run build
 
       - name: Publish
-        run: pnpm --filter @graphyne/core publish --no-git-checks
+        run: pnpm --filter @graphyne/web-components publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

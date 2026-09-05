@@ -162,7 +162,7 @@ onUnmounted(() => {
    * properties are inherited down to this box. Redeclaring a flat default
    * value on THIS element (rather than only as the second var() argument)
    * would win over that inherited value regardless of what the consumer
-   * passed in — the exact bug documented in packages/core/CLAUDE.md's
+   * passed in — the exact bug documented in packages/web-components/CLAUDE.md's
    * "four-variable color override" section.
    */
   display: flex;

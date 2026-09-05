@@ -10,7 +10,7 @@ import GnFormInputField from "./components/forms/GnFormInputField/GnFormInputFie
  * tag prefix) can register them under whatever tag name they choose:
  *
  * ```ts
- * import { GnButtonElement } from '@graphyne/core/elements'
+ * import { GnButtonElement } from '@graphyne/web-components/elements'
  * customElements.define('my-button', GnButtonElement)
  * ```
  */
@@ -41,7 +41,7 @@ export function registerGraphyneElements(prefix = "gn"): void {
   }
 }
 
-// Importing this entry point (`@graphyne/core/elements`) registers the
+// Importing this entry point (`@graphyne/web-components/elements`) registers the
 // default `gn-*` tags as a side effect, so it works as a drop-in script
 // or module import with no extra setup required.
 registerGraphyneElements();

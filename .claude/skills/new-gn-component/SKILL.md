@@ -1,11 +1,11 @@
 ---
 name: new-gn-component
-description: Scaffold a new Graphyne component in packages/core (Vue SFC + stories + tests + full wiring), following this repo's established conventions. Use when the user asks to create, add, or scaffold a new Gn* component, or to finish/wire up an existing half-built one.
+description: Scaffold a new Graphyne component in packages/web-components (Vue SFC + stories + tests + full wiring), following this repo's established conventions. Use when the user asks to create, add, or scaffold a new Gn* component, or to finish/wire up an existing half-built one.
 ---
 
 # Scaffolding a new Graphyne component
 
-Full conventions live in `packages/core/CLAUDE.md` — read it first if it
+Full conventions live in `packages/web-components/CLAUDE.md` — read it first if it
 hasn't already been loaded this session. This skill is the checklist for
 turning those conventions into a complete, working component in one pass.
 
@@ -56,8 +56,8 @@ A component isn't usable from outside its own folder until:
 ## 4. Verify before calling it done
 
 ```bash
-pnpm --filter @graphyne/core run test -- GnExample
-pnpm --filter @graphyne/core run typecheck
+pnpm --filter @graphyne/web-components run test -- GnExample
+pnpm --filter @graphyne/web-components run typecheck
 ```
 
 Then check it renders in the Storybook preview (the `storybook` launch

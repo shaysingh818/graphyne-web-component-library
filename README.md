@@ -33,7 +33,7 @@ pnpm build       # builds every publishable package
 ```
 graphyne-web-component-library/
 ├─ packages/
-│  └─ core/                     @graphyne/core — the component library
+│  └─ core/                     @graphyne/web-components — the component library
 │     ├─ src/
 │     │  ├─ components/
 │     │  │  ├─ buttons/
@@ -61,7 +61,7 @@ later (see [Future frameworks](#future-frameworks-react-svelte-)).
 ## Authoring a component
 
 Components are grouped into category folders under
-`packages/core/src/components/` — `buttons/`, `layout/`, and so on — so the
+`packages/web-components/src/components/` — `buttons/`, `layout/`, and so on — so the
 source tree stays organized as the library grows instead of a single flat
 folder of unrelated components. Within a category, every component still
 gets its own folder with four files: the `.vue` component, a `.stories.ts`
@@ -78,27 +78,27 @@ folder.
 
 To add a new component to an existing category (e.g. a second button):
 
-1. Create `packages/core/src/components/buttons/MyThing/MyThing.vue`.
-2. Add `packages/core/src/components/buttons/MyThing/index.ts` that
+1. Create `packages/web-components/src/components/buttons/MyThing/MyThing.vue`.
+2. Add `packages/web-components/src/components/buttons/MyThing/index.ts` that
    re-exports it.
 3. Add `export * from "./MyThing";` to
-   `packages/core/src/components/buttons/index.ts`.
-4. Register it in `packages/core/src/elements.ts` if it should also ship as
+   `packages/web-components/src/components/buttons/index.ts`.
+4. Register it in `packages/web-components/src/elements.ts` if it should also ship as
    a custom element (almost everything should).
 5. Add a `.stories.ts` file (`title: "Buttons/MyThing"` — see
    [Storybook](#storybook-the-playground) below) and a `.test.ts` file with
    Vitest + `@vue/test-utils` coverage.
 6. If it should be globally registerable via the `install()` Vue plugin,
-   add it to `packages/core/src/index.ts`.
+   add it to `packages/web-components/src/index.ts`.
 
 To start a brand-new category (e.g. `navigation`):
 
-1. Create `packages/core/src/components/navigation/`.
+1. Create `packages/web-components/src/components/navigation/`.
 2. Add your first component inside it, following the same folder shape as
    above.
-3. Add `packages/core/src/components/navigation/index.ts` re-exporting it.
+3. Add `packages/web-components/src/components/navigation/index.ts` re-exporting it.
 4. Add `export * from "./components/navigation";` to
-   `packages/core/src/index.ts`.
+   `packages/web-components/src/index.ts`.
 
 Naming convention: components are prefixed `Gn` (short for Graphyne) in Vue
 land, and compile down to `gn-*` custom element tag names (e.g. `GnButton`
@@ -107,21 +107,21 @@ reads naturally (`buttons`, not `Buttons`/`button`).
 
 ## Two build outputs, one source
 
-`packages/core/package.json` exposes two entry points:
+`packages/web-components/package.json` exposes two entry points:
 
 | Import | What it is | Vue required in the consumer? |
 |---|---|---|
-| `@graphyne/core` | Plain Vue components (`GnButton`, `GnCard`, …) plus a Vue `install()` plugin | Yes |
-| `@graphyne/core/elements` | Self-registering custom elements (`<gn-button>`, `<gn-card>`, …) | No |
+| `@graphyne/web-components` | Plain Vue components (`GnButton`, `GnCard`, …) plus a Vue `install()` plugin | Yes |
+| `@graphyne/web-components/elements` | Self-registering custom elements (`<gn-button>`, `<gn-card>`, …) | No |
 
 ```ts
 // Inside a Vue app
 import { createApp } from "vue";
-import GraphyneCore from "@graphyne/core";
-createApp(App).use(GraphyneCore).mount("#app");
+import GraphyneWebComponents from "@graphyne/web-components";
+createApp(App).use(GraphyneWebComponents).mount("#app");
 
 // Anywhere else (React, Svelte, plain HTML)
-import "@graphyne/core/elements";
+import "@graphyne/web-components/elements";
 // <gn-button variant="primary">Save</gn-button> now works as an HTML tag
 ```
 
@@ -137,7 +137,7 @@ a shared stylesheet), so the elements are fully self-contained.
 [Tailwind CSS v4](https://tailwindcss.com/) is wired in via the
 [`@tailwindcss/vite`](https://www.npmjs.com/package/@tailwindcss/vite)
 plugin. The entry stylesheet is
-`packages/core/src/styles/tailwind.css` — add your `@theme` tokens and any
+`packages/web-components/src/styles/tailwind.css` — add your `@theme` tokens and any
 shared `@layer` rules there.
 
 It's currently only wired into two places:
@@ -165,7 +165,7 @@ jsdom environment, co-located next to each component:
 
 ```bash
 pnpm test              # run once
-pnpm --filter @graphyne/core run test:watch
+pnpm --filter @graphyne/web-components run test:watch
 ```
 
 ## Storybook (the playground)
@@ -179,7 +179,7 @@ pnpm storybook          # dev server at http://localhost:6006
 pnpm build-storybook    # static build, e.g. for deploying docs
 ```
 
-Storybook config lives in `packages/core/.storybook/`. Add a `.stories.ts`
+Storybook config lives in `packages/web-components/.storybook/`. Add a `.stories.ts`
 file next to any component and it's picked up automatically.
 
 The Storybook sidebar is grouped by each story's `title` field, not by file
@@ -189,22 +189,22 @@ folder name (capitalized), so the sidebar mirrors the source layout.
 
 ## Publishing
 
-`packages/core` builds to `packages/core/dist/` with proper `exports`,
+`packages/web-components` builds to `packages/web-components/dist/` with proper `exports`,
 `types`, and a `peerDependencies` entry for `vue`. Before publishing for
 real:
 
 - Decide on and reserve an actual npm scope/org (this scaffold uses
   `@graphyne` as a placeholder — update the `name` field in
-  `packages/core/package.json` if that's not the final name).
+  `packages/web-components/package.json` if that's not the final name).
 - Consider adding [Changesets](https://github.com/changesets/changesets) for
   versioning and changelogs once there's more than one package to publish.
-- `pnpm --filter @graphyne/core publish` once logged in to npm (`npm login`)
+- `pnpm --filter @graphyne/web-components publish` once logged in to npm (`npm login`)
   and the package name/version are finalized.
 
 ## Future frameworks (React, Svelte, …)
 
 Because the components already compile to plain custom elements via
-`@graphyne/core/elements`, framework-specific packages can be added later
+`@graphyne/web-components/elements`, framework-specific packages can be added later
 without touching how components are authored:
 
 - `packages/react/` — thin typed wrappers around the custom elements
@@ -216,7 +216,7 @@ without touching how components are authored:
 
 Both would live as new entries under `packages/` in this same pnpm
 workspace, each with its own `package.json`, consuming
-`@graphyne/core/elements` as a dependency rather than reimplementing the
+`@graphyne/web-components/elements` as a dependency rather than reimplementing the
 components.
 
 ## License

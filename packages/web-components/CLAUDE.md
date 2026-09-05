@@ -1,4 +1,4 @@
-# @graphyne/core — component conventions
+# @graphyne/web-components — component conventions
 
 Every component lives in its own folder under `src/components/<group>/<ComponentName>/`
 with four files:

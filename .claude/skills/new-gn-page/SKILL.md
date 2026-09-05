@@ -1,6 +1,6 @@
 ---
 name: new-gn-page
-description: Scaffold a new Storybook showcase page in packages/core that composes multiple existing Gn* components into a full demo screen (e.g. an app shell, a settings screen), following this repo's established conventions. Use when the user asks to create, add, or scaffold a new demo/example page, or a composed multi-component screen.
+description: Scaffold a new Storybook showcase page in packages/web-components that composes multiple existing Gn* components into a full demo screen (e.g. an app shell, a settings screen), following this repo's established conventions. Use when the user asks to create, add, or scaffold a new demo/example page, or a composed multi-component screen.
 ---
 
 # Scaffolding a new Graphyne showcase page
@@ -30,7 +30,7 @@ screen composing every component in the library at once (dark side nav +
 ## 2. Where it lives
 
 ```
-packages/core/src/stories/pages/<PageName>.stories.ts
+packages/web-components/src/stories/pages/<PageName>.stories.ts
 ```
 
 Title it `"Pages/<PageName>"` so it groups separately from component-level
@@ -71,6 +71,6 @@ so the canvas isn't padded like a normal component story.
   and confirming the right `v-show` section becomes visible) are a
   reasonable substitute for a screenshot when the Browser pane can't
   compose frames — confirm actual behavior, not just that nothing throws.
-- `pnpm --filter @graphyne/core run typecheck` and
-  `pnpm --filter @graphyne/core run test` should stay green (a page adds
+- `pnpm --filter @graphyne/web-components run typecheck` and
+  `pnpm --filter @graphyne/web-components run test` should stay green (a page adds
   no component logic, so this is really "did I break something else").

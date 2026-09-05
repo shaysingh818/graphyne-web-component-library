@@ -6,9 +6,9 @@ API (props/emits/slots) has to make sense to a consumer who isn't using Vue.
 
 ## Layout
 
-- `packages/*` — publishable packages. Currently just `packages/core`
-  (`@graphyne/core`), the actual component library. See
-  `packages/core/CLAUDE.md` for how components in there are authored.
+- `packages/*` — publishable packages. Currently just `packages/web-components`
+  (`@graphyne/web-components`), the actual component library. See
+  `packages/web-components/CLAUDE.md` for how components in there are authored.
 - `apps/*` — reserved by the workspace glob (`pnpm-workspace.yaml`) for
   consumer apps, none exist yet.
 
@@ -19,7 +19,7 @@ pnpm test         # vitest run, all packages
 pnpm typecheck    # vue-tsc --noEmit, all packages
 pnpm lint         # eslint . --ext .ts,.vue
 pnpm build        # build all packages
-pnpm storybook    # Storybook dev server for @graphyne/core, localhost:6006
+pnpm storybook    # Storybook dev server for @graphyne/web-components, localhost:6006
 ```
 
 ## Working conventions

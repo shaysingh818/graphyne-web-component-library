@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from "node:url";
 
 /**
  * Library build for consuming components directly as Vue components,
- * e.g. `import { GnButton } from '@graphyne/core'` inside a Vue app.
+ * e.g. `import { GnButton } from '@graphyne/web-components'` inside a Vue app.
  * Vue is treated as a peer dependency (externalized) since the host
  * Vue app already provides the runtime.
  *
@@ -21,9 +21,9 @@ export default defineConfig({
     emptyOutDir: true,
     lib: {
       entry: fileURLToPath(new URL("./src/index.ts", import.meta.url)),
-      name: "GraphyneCore",
+      name: "GraphyneWebComponents",
       formats: ["es"],
-      fileName: () => "graphyne-core.js"
+      fileName: () => "graphyne-web-components.js"
     },
     rollupOptions: {
       external: ["vue"],

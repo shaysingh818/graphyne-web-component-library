@@ -88,7 +88,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A realistic workspace settings screen composing every component currently in @graphyne/core into one page: a dark GnNavigationBar side rail (GnNavigationHeader + GnNavigationItem entries + trailing GnIconButtons), a GnBackBar page header carrying a GnSearchFormField and a GnIconButton in its actions slot, a GnTabNavigationBar switching between three sections, and GnCard panels holding a GnFormInputField / GnFormDropDownField / GnFormTextField form with GnButton actions in the footer. Nothing here is a new component — it's the same composition pattern as GnNavigationBar.stories.ts's SideNav/TopBar demos, just assembled into a full screen instead of one nav shell."
+          "A realistic workspace settings screen composing every component currently in @graphyne/web-components into one page: a dark GnNavigationBar side rail (GnNavigationHeader + GnNavigationItem entries + trailing GnIconButtons), a GnBackBar page header carrying a GnSearchFormField and a GnIconButton in its actions slot, a GnTabNavigationBar switching between three sections, and GnCard panels holding a GnFormInputField / GnFormDropDownField / GnFormTextField form with GnButton actions in the footer. Nothing here is a new component — it's the same composition pattern as GnNavigationBar.stories.ts's SideNav/TopBar demos, just assembled into a full screen instead of one nav shell."
       }
     }
   }

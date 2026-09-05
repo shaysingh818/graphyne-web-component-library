@@ -1,4 +1,4 @@
-# Builds the @graphyne/core Storybook (the component docs/demo site) and
+# Builds the @graphyne/web-components Storybook (the component docs/demo site) and
 # publishes it to GitHub Pages. Uses the official GitHub Pages actions
 # (OIDC-based deploy, no gh-pages branch, no PAT secret needed) rather than
 # a third-party deploy action.
@@ -43,15 +43,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Root script (see package.json) forwards to `@graphyne/core`, whose
-      # own build-storybook script outputs to packages/core/storybook-static.
+      # Root script (see package.json) forwards to `@graphyne/web-components`, whose
+      # own build-storybook script outputs to packages/web-components/storybook-static.
       - name: Build Storybook
         run: pnpm run build-storybook
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: packages/core/storybook-static
+          path: packages/web-components/storybook-static
 
   deploy:
     needs: build

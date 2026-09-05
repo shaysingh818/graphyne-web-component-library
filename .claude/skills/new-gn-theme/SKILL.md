@@ -1,13 +1,13 @@
 ---
 name: new-gn-theme
-description: Scaffold a new design-token theme (a named set of CSS custom property overrides) for @graphyne/core, following this repo's established conventions. Use when the user asks to create, add, or scaffold a new theme, color scheme, or brand variant.
+description: Scaffold a new design-token theme (a named set of CSS custom property overrides) for @graphyne/web-components, following this repo's established conventions. Use when the user asks to create, add, or scaffold a new theme, color scheme, or brand variant.
 ---
 
 # Scaffolding a new Graphyne theme
 
 Every component already exposes its colors as `--gn-<component>-*` custom
 properties with a hardcoded fallback declared locally in that component's
-own `<style scoped>` block (see `packages/core/CLAUDE.md`'s "four-variable
+own `<style scoped>` block (see `packages/web-components/CLAUDE.md`'s "four-variable
 color override" section) — e.g. `GnBackBar` owns
 `--gn-back-bar-background: #ffffff` on `.gn-back-bar`. `tokens.css` exists
 at `src/styles/tokens.css` but is currently empty; no component reads
@@ -49,7 +49,7 @@ presenting both:
 ## 2. Create the token file
 
 ```
-packages/core/src/styles/themes/<theme-name>.css
+packages/web-components/src/styles/themes/<theme-name>.css
 ```
 
 Import it from `src/index.ts` (production build) and
@@ -62,6 +62,6 @@ three already have.
 - Spot-check the theme against a couple of components from different
   groups (e.g. a button and a nav component) in Storybook, not just one —
   confirm every color the theme sets is actually visible somewhere.
-- `pnpm --filter @graphyne/core run typecheck` and
-  `pnpm --filter @graphyne/core run test` should stay green — a theme is
+- `pnpm --filter @graphyne/web-components run typecheck` and
+  `pnpm --filter @graphyne/web-components run test` should stay green — a theme is
   CSS-only and shouldn't touch component logic.

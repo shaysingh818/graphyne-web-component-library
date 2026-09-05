@@ -14,8 +14,8 @@
     "test:watch": "pnpm --filter \"./packages/**\" run test:watch",
     "typecheck": "pnpm --filter \"./packages/**\" run typecheck",
     "lint": "eslint . --ext .ts,.vue",
-    "storybook": "pnpm --filter @graphyne/core run storybook",
-    "build-storybook": "pnpm --filter @graphyne/core run build-storybook",
+    "storybook": "pnpm --filter @graphyne/web-components run storybook",
+    "build-storybook": "pnpm --filter @graphyne/web-components run build-storybook",
     "clean": "pnpm --filter \"./packages/**\" run clean"
   },
   "devDependencies": {

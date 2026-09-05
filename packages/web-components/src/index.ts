@@ -24,9 +24,9 @@ export * from "./components/overlays";
  *
  * ```ts
  * import { createApp } from 'vue'
- * import GraphyneCore from '@graphyne/core'
+ * import GraphyneWebComponents from '@graphyne/web-components'
  *
- * createApp(App).use(GraphyneCore).mount('#app')
+ * createApp(App).use(GraphyneWebComponents).mount('#app')
  * ```
  */
 export default {

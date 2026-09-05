@@ -1,5 +1,5 @@
 {
-  "name": "@graphyne/core",
+  "name": "@graphyne/web-components",
   "version": "0.1.0",
   "description": "Graphyne Web Components — authored as Vue 3 SFCs, published as framework-agnostic custom elements.",
   "type": "module",
@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shaysingh818/graphyne-web-component-library.git",
-    "directory": "packages/core"
+    "directory": "packages/web-components"
   },
   "homepage": "https://shaysingh818.github.io/graphyne-web-component-library/",
   "bugs": {
@@ -27,13 +27,13 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/graphyne-core.js",
-  "module": "./dist/graphyne-core.js",
+  "main": "./dist/graphyne-web-components.js",
+  "module": "./dist/graphyne-web-components.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/graphyne-core.js"
+      "import": "./dist/graphyne-web-components.js"
     },
     "./elements": {
       "types": "./dist/index.d.ts",
