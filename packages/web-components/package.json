@@ -39,6 +39,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/elements/graphyne-elements.js"
     },
+    "./style.css": "./dist/style.css",
     "./package.json": "./package.json"
   },
   "sideEffects": [
