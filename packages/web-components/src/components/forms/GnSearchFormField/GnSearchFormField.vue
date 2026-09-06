@@ -36,7 +36,9 @@ const props = withDefaults(
     /** Overrides the color of the text typed into the field (any valid CSS color). */
     textColor?: string;
     /** Overrides the field's border color (any valid CSS color). Use "transparent" to remove the border. */
-    borderColor?: string;
+    inputBorderColor?: string;
+    /** Overrides the field's border color (any valid CSS color). Use "transparent" to remove the border. */
+    buttonBorderColor?: string;
     /** Overrides the search button's background color independently of the input's `backgroundColor` (any valid CSS color). Falls back to `backgroundColor` when unset. */
     buttonBackgroundColor?: string;
     /** Validation message; when set, renders below the field and marks it invalid. */
@@ -53,7 +55,8 @@ const props = withDefaults(
     color: undefined,
     backgroundColor: undefined,
     textColor: undefined,
-    borderColor: undefined,
+    inputBorderColor: undefined,
+    buttonBorderColor: undefined,
     buttonBackgroundColor: undefined,
     error: undefined,
     id: undefined
@@ -78,7 +81,8 @@ const style = computed(() => {
   if (props.color) overrides["--gn-input-accent"] = props.color;
   if (props.backgroundColor) overrides["--gn-input-background"] = props.backgroundColor;
   if (props.textColor) overrides["--gn-input-text-color"] = props.textColor;
-  if (props.borderColor) overrides["--gn-input-border"] = props.borderColor;
+  if (props.inputBorderColor) overrides["--gn-input-border"] = props.inputBorderColor;
+  if (props.buttonBorderColor) overrides["--gn-button-border"] = props.buttonBorderColor;
   if (props.buttonBackgroundColor) overrides["--gn-search-button-background"] = props.buttonBackgroundColor;
   return Object.keys(overrides).length ? overrides : undefined;
 });
@@ -136,7 +140,8 @@ function handleSearch() {
   --gn-input-accent: #f97316;
   --gn-input-background: #ffffff;
   --gn-input-text-color: #111827;
-  --gn-input-border: #d1d5db;
+  --gn-input-border: #d1d5db;  
+  --gn-button-border: #f97316;
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
@@ -199,7 +204,7 @@ function handleSearch() {
   width: 2.375rem;
   padding: 0;
   border-radius: 0.375rem;
-  border: 1px solid var(--gn-input-border);
+  border: 1px solid var(--gn-button-border);
   background-color: var(--gn-search-button-background, var(--gn-input-background));
   color: var(--gn-input-accent);
   cursor: pointer;

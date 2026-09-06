@@ -76,7 +76,7 @@ export const WithStyles: Story = {
     color: "#0A9CF2",
     backgroundColor: "white",
     textColor: "#0A9CF2",
-    borderColor: "#0A9CF2"
+    inputBorderColor: "#0A9CF2"
   },
   parameters: {
     docs: {
@@ -90,7 +90,7 @@ export const WithStyles: Story = {
 export const WithButtonBackgroundColor: Story = {
   args: {
     color: "white",
-    borderColor: "#0A9CF2",
+    buttonBorderColor: "#0A9CF2",
     buttonBackgroundColor: "#0A9CF2"
   },
   parameters: {
