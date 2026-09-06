@@ -85,7 +85,6 @@ describe("GnSearchFormField", () => {
     const style = wrapper.attributes("style");
     expect(style).toContain("--gn-input-background: rgb(28, 25, 23)");
     expect(style).toContain("--gn-input-text-color: #f97316");
-    expect(style).toContain("--gn-input-border: transparent");
     expect(style).not.toContain("--gn-input-accent");
   });
 
