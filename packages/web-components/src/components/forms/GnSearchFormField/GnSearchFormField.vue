@@ -141,7 +141,7 @@ function handleSearch() {
   --gn-input-background: #ffffff;
   --gn-input-text-color: #111827;
   --gn-input-border: #d1d5db;  
-  --gn-button-border: #f97316;
+  --gn-button-border: var(--gn-input-accent);
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
