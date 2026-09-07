@@ -106,17 +106,6 @@ export const WithButtonBackgroundColor: Story = {
     }
   }
 };
-// <GnSearchFormField 
-//   v-model="searchTerm"
-//   inputBorderColor="rgb(28 25 23)" 
-//   buttonBorderColor="#F97316"
-//   buttonBackgroundColor="#F97316" 
-//   color="white" 
-//   label="Search Decks" 
-//   placeholder="Search Subjects"
-//   backgroundColor="rgb(28 25 23)"
-//   @gn-search="search"
-// />
 
 export const WithDarkThemeColor: Story = {
   args: {
