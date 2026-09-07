@@ -23,7 +23,9 @@ const meta = {
   },
   args: {
     label: "Search",
-    placeholder: "Search…",
+    placeholder: "Search…",    
+    buttonBorderColor: "#d1d5db",
+    buttonIconColor: "#f97316",
     "onUpdate:modelValue": fn(),
   },
   render: (args) => ({
@@ -73,10 +75,12 @@ export const WithError: Story = {
 
 export const WithStyles: Story = {
   args: {
-    color: "#0A9CF2",
+    focusColor: "#0A9CF2",
     backgroundColor: "white",
     textColor: "#0A9CF2",
-    inputBorderColor: "#0A9CF2"
+    inputBorderColor: "#0A9CF2",
+    buttonIconColor: "#0A9CF2",
+    buttonBorderColor: "#0A9CF2"
   },
   parameters: {
     docs: {
@@ -89,9 +93,28 @@ export const WithStyles: Story = {
 
 export const WithButtonBackgroundColor: Story = {
   args: {
-    color: "white",
+    focusColor: "white",
     buttonBorderColor: "#0A9CF2",
-    buttonBackgroundColor: "#0A9CF2"
+    buttonBackgroundColor: "#0A9CF2",
+    buttonIconColor: "white"
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "`buttonBackgroundColor` overrides just the search button's background, independently of the input's own background — useful for a solid accent-colored button next to a plain input."
+      }
+    }
+  }
+};
+
+export const WithDarkThemeColor: Story = {
+  args: {
+    focusColor: "#F97316",
+    buttonBorderColor: "#F97316",
+    buttonBackgroundColor: "#F97316",
+    backgroundColor: "rgb(28 25 23)",
+    buttonIconColor: "white",
+    textColor: "#F97316"
   },
   parameters: {
     docs: {

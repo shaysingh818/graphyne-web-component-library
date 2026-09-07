@@ -4,7 +4,7 @@ import "./styles/tokens.css";
 import "./styles/shared.css";
 
 import { GnButton, GnIconButton } from "./components/buttons";
-import { GnCard, GnListTile } from "./components/layout";
+import { GnCard, GnListTile, GnMetricCard } from "./components/layout";
 import { GnFormInputField, GnFormDropDownField, GnSearchFormField, GnFormTextField } from "./components/forms";
 import { GnNavigationItem, GnNavigationHeader, GnNavigationBar, GnTabNavigationBar, GnTabNavigationItem, GnBackBar } from "./components/navigation";
 import { GnBarChart, GnDoughnutChart, GnLineChart, GnPieChart } from "./components/charts";
@@ -35,6 +35,7 @@ export default {
     app.component("GnIconButton", GnIconButton);
     app.component("GnCard", GnCard);
     app.component("GnListTile", GnListTile);
+    app.component("GnMetricCard", GnMetricCard);
     app.component("GnFormInputField", GnFormInputField);
     app.component("GnFormDropDownField", GnFormDropDownField);
     app.component("GnSearchFormField", GnSearchFormField);

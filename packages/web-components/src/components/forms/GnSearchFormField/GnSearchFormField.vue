@@ -30,7 +30,9 @@ const props = withDefaults(
     /** Disables the field and prevents input/change events from firing. */
     disabled?: boolean;
     /** Overrides the accent color used for the focus ring (any valid CSS color). */
-    color?: string;
+    focusColor?: string;    
+    /** Overrides the accent color used for icon in the button (any valid CSS color). */
+    buttonIconColor?: string;
     /** Overrides the input field's background color (any valid CSS color). */
     backgroundColor?: string;
     /** Overrides the color of the text typed into the field (any valid CSS color). */
@@ -52,7 +54,8 @@ const props = withDefaults(
     placeholder: undefined,
     type: "text",
     disabled: false,
-    color: undefined,
+    focusColor: undefined,
+    buttonIconColor: undefined,
     backgroundColor: undefined,
     textColor: undefined,
     inputBorderColor: undefined,
@@ -78,7 +81,8 @@ const errorId = computed(() => `${inputId.value}-error`);
 
 const style = computed(() => {
   const overrides: Record<string, string> = {};
-  if (props.color) overrides["--gn-input-accent"] = props.color;
+  if (props.focusColor) overrides["--gn-input-focus-accent"] = props.focusColor;
+  if (props.buttonIconColor) overrides["--gn-input-icon-accent"] = props.buttonIconColor;
   if (props.backgroundColor) overrides["--gn-input-background"] = props.backgroundColor;
   if (props.textColor) overrides["--gn-input-text-color"] = props.textColor;
   if (props.inputBorderColor) overrides["--gn-input-border"] = props.inputBorderColor;
@@ -142,6 +146,8 @@ function handleSearch() {
   --gn-input-text-color: #111827;
   --gn-input-border: #d1d5db;  
   --gn-button-border: var(--gn-input-accent);
+  --gn-input-focus-accent: var(--gn-input-accent); 
+  --gn-input-icon-accent: var(--gn-input-background); 
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
@@ -179,8 +185,8 @@ function handleSearch() {
 
 .gn-form-input-field__input:focus-visible {
   outline: none;
-  border-color: var(--gn-input-accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gn-input-accent) 25%, transparent);
+  border-color: var(--gn-input-focus-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gn-input-focus-accent) 25%, transparent);
 }
 
 .gn-form-input-field__input:disabled {
@@ -206,7 +212,7 @@ function handleSearch() {
   border-radius: 0.375rem;
   border: 1px solid var(--gn-button-border);
   background-color: var(--gn-search-button-background, var(--gn-input-background));
-  color: var(--gn-input-accent);
+  color: var(--gn-input-icon-accent);
   cursor: pointer;
   transition: background-color 120ms ease, border-color 120ms ease, opacity 120ms ease;
 }
