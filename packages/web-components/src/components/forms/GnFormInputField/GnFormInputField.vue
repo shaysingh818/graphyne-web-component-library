@@ -119,7 +119,7 @@ function handleInput(event: Event) {
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.2;
-  color: #374151;
+  color: var(--gn-input-accent);
 }
 
 .gn-form-input-field__input {

@@ -62,7 +62,7 @@ const style = computed(() =>
      */
     display: inline-flex;
     border-radius: 5px;
-    padding: 5px;
+    padding: 3px;
     white-space: nowrap;
     align-items: center;
     justify-content: center;
