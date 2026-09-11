@@ -78,7 +78,7 @@ function handleBack(event: MouseEvent) {
 
 <template>
   <div
-    class="gn-back-bar grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-2 rounded-lg px-3"
+    class="gn-back-bar grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-2 px-3"
     :style="style"
   >
     <button
