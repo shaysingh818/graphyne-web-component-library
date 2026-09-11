@@ -143,4 +143,68 @@ describe("GnFileUploadField", () => {
     const wrapper = mount(GnFileUploadField, { props: { color: "#059669" } });
     expect(wrapper.attributes("style")).toBe("--gn-file-upload-accent: #059669;");
   });
+
+  describe("filePicker", () => {
+    it("calls filePicker instead of opening the native input when clicked", async () => {
+      const descriptor = { name: "photo.png", path: "/Users/demo/photo.png" };
+      const filePicker = vi.fn().mockResolvedValue([descriptor]);
+      const wrapper = mount(GnFileUploadField, { props: { filePicker } });
+
+      await wrapper.find(".gn-file-upload-field__dropzone").trigger("click");
+      await Promise.resolve();
+
+      expect(filePicker).toHaveBeenCalledTimes(1);
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([[descriptor]]);
+    });
+
+    it("does not call filePicker or add anything when disabled", async () => {
+      const filePicker = vi.fn().mockResolvedValue([{ name: "photo.png" }]);
+      const wrapper = mount(GnFileUploadField, { props: { filePicker, disabled: true } });
+
+      await wrapper.find(".gn-file-upload-field__dropzone").trigger("click");
+
+      expect(filePicker).not.toHaveBeenCalled();
+      expect(wrapper.emitted("update:modelValue")).toBeUndefined();
+    });
+  });
+
+  describe("descriptor items (e.g. from a Tauri filePicker)", () => {
+    it("identifies descriptors by path and de-duplicates re-added ones", async () => {
+      const descriptor = { name: "photo.png", path: "/Users/demo/photo.png" };
+      const filePicker = vi.fn().mockResolvedValue([descriptor]);
+      const wrapper = mount(GnFileUploadField, {
+        props: { filePicker, modelValue: [{ name: "photo.png", path: "/Users/demo/photo.png" }] }
+      });
+
+      await wrapper.find(".gn-file-upload-field__dropzone").trigger("click");
+      await Promise.resolve();
+
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([[descriptor]]);
+    });
+
+    it("renders previewUrl directly instead of creating an object URL", () => {
+      const wrapper = mount(GnFileUploadField, {
+        props: { modelValue: [{ name: "photo.png", previewUrl: "https://example.com/thumb.png" }] }
+      });
+      const img = wrapper.find("img.gn-file-upload-field__thumb");
+      expect(img.attributes("src")).toBe("https://example.com/thumb.png");
+    });
+
+    it("omits the size when a descriptor doesn't provide one", () => {
+      const wrapper = mount(GnFileUploadField, {
+        props: { modelValue: [{ name: "photo.png", path: "/Users/demo/photo.png" }] }
+      });
+      expect(wrapper.find(".gn-file-upload-field__size").exists()).toBe(false);
+    });
+
+    it("removes a descriptor by path and emits gn-remove with it", async () => {
+      const descriptor = { name: "photo.png", path: "/Users/demo/photo.png" };
+      const wrapper = mount(GnFileUploadField, { props: { modelValue: [descriptor] } });
+
+      await wrapper.find(".gn-file-upload-field__remove").trigger("click");
+
+      expect(wrapper.emitted("gn-remove")?.[0]).toEqual([descriptor]);
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([[]]);
+    });
+  });
 });
