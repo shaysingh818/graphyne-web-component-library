@@ -129,6 +129,30 @@ export const CustomAccent: Story = {
   }
 };
 
+export const CustomFilePicker: Story = {
+  args: {
+    label: "Upload images (custom picker)",
+    // Stands in for a platform dialog — e.g. Tauri's `@tauri-apps/plugin-dialog`
+    // `open()` — that resolves real filesystem paths instead of browser Files.
+    filePicker: async () => [
+      {
+        name: "cover-photo.png",
+        path: "/Users/demo/Pictures/cover-photo.png",
+        previewUrl: `data:image/png;base64,${ONE_PIXEL_PNG_BASE64}`,
+        size: 482_000
+      }
+    ]
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The `filePicker` prop replaces the built-in native file input with any async function — e.g. one wrapping a Tauri dialog that resolves real paths. Click the dropzone to run it. Returned items only need `name`; `path`/`previewUrl`/`size` are optional and carried straight through to `modelValue`/`gn-update`/`gn-remove` so the consumer can read the platform-specific path back out."
+      }
+    }
+  }
+};
+
 export const DarkDropzone: Story = {
   args: {
     label: undefined,

@@ -1,38 +1,76 @@
+<script lang="ts">
+/**
+ * A file descriptor for platforms where a picked item isn't (only) a browser
+ * `File` — e.g. a Tauri app using `@tauri-apps/plugin-dialog`'s `open()`,
+ * which resolves real filesystem paths rather than `File` objects. Return
+ * these from a custom `filePicker`, or hand them to `modelValue` directly,
+ * anywhere a `File` is accepted.
+ */
+export interface UploadFileDescriptor {
+  /** Display name shown in the selected-files list. */
+  name: string;
+  /** Shown next to the name, formatted (e.g. "240 KB"), when provided. */
+  size?: number;
+  /** Thumbnail URL shown instead of the generic file icon (e.g. from Tauri's `convertFileSrc()`). */
+  previewUrl?: string;
+  /** Not read by the component itself — carried through untouched so the consumer can read it back off `modelValue`/`gn-update`/`gn-remove` (e.g. a real filesystem path used to identify the item). */
+  path?: string;
+}
+
+/** Anything GnFileUploadField can hold: a real browser `File`, or a descriptor for platforms that pick files by some other means. */
+export type UploadItem = File | UploadFileDescriptor;
+</script>
+
 <script setup lang="ts">
 /**
  * GnFileUploadField
  *
- * A framework-agnostic file upload dropzone with `v-model` support. Selection
- * happens through a visually-hidden native `<input type="file">` (click-to-browse)
- * plus native HTML5 drag-and-drop onto the zone — deliberately not a
- * platform-specific file dialog (e.g. Tauri's `@tauri-apps/plugin-dialog`), so
- * the same component works in a plain browser app, an Electron/Tauri webview,
- * or anywhere else a DOM exists. `modelValue` is a plain `File[]`; image files
- * get a live thumbnail via `URL.createObjectURL` (revoked on removal/unmount
- * to avoid leaking blob URLs), non-image files fall back to a generic file
- * glyph. Files are de-duplicated by name+size+lastModified so re-selecting or
- * re-dropping the same file is a no-op. Colors follow the four-variable
+ * A framework-agnostic file upload dropzone with `v-model` support. By
+ * default, selection happens through a visually-hidden native
+ * `<input type="file">` (click-to-browse) plus native HTML5 drag-and-drop
+ * onto the zone — deliberately not a platform-specific file dialog, so the
+ * same component works in a plain browser app, an Electron/Tauri webview, or
+ * anywhere else a DOM exists. Platforms that need more than a browser `File`
+ * gives you (most commonly: a real filesystem path, e.g. a Tauri app calling
+ * a Rust command that reads by path) can pass a `filePicker` prop — an async
+ * function that replaces the click-to-browse step and can resolve
+ * `UploadFileDescriptor` objects (`{ name, size?, previewUrl?, path? }`)
+ * instead of `File`s; drag-and-drop still yields plain `File`s regardless.
+ * `modelValue` accepts a mix of both. Image `File`s get a live thumbnail via
+ * `URL.createObjectURL` (revoked on removal/unmount to avoid leaking blob
+ * URLs); descriptors show `previewUrl` if given. Everything else falls back
+ * to a generic file glyph. Items are de-duplicated — by name+size+lastModified
+ * for `File`s, by `path` (or name+size) for descriptors — so re-selecting or
+ * re-dropping the same item is a no-op. Colors follow the four-variable
  * override pattern used across the library, in their own `--gn-file-upload-*`
  * namespace since this is visually distinct from `GnFormInputField`. Emits
  * `update:modelValue` (so `v-model` works in Vue) and a namespaced `gn-update`
- * carrying the full new `File[]`, since `v-model` doesn't cross the
+ * carrying the full new list, since `v-model` doesn't cross the
  * custom-element boundary once this compiles to a native element; a single
- * removal additionally emits `gn-remove` with just the removed `File`.
+ * removal additionally emits `gn-remove` with just the removed item.
  */
 import { computed, onBeforeUnmount, ref, useId, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
     /** Currently selected files; bind with `v-model`. */
-    modelValue?: File[];
+    modelValue?: UploadItem[];
     /** Visible label rendered above the dropzone. */
     label?: string;
-    /** Forwarded to the native file input's `accept` attribute. */
+    /** Forwarded to the native file input's `accept` attribute. Ignored when `filePicker` is set. */
     accept?: string;
     /** Allows selecting/dropping more than one file at a time. */
     multiple?: boolean;
     /** Disables the dropzone and prevents selection/removal from firing. */
     disabled?: boolean;
+    /**
+     * Replaces the built-in click-to-browse step with a custom async picker —
+     * e.g. one that wraps a platform file dialog and resolves real paths.
+     * When set, clicking/activating the dropzone calls this instead of
+     * opening the native file input; native drag-and-drop onto the zone still
+     * works and still yields plain `File`s either way.
+     */
+    filePicker?: () => Promise<UploadItem[]>;
     /** Overrides the accent color used for the dropzone border/icon on hover and drag-over (any valid CSS color). */
     color?: string;
     /** Overrides the dropzone's background color (any valid CSS color). */
@@ -52,6 +90,7 @@ const props = withDefaults(
     accept: "image/*",
     multiple: true,
     disabled: false,
+    filePicker: undefined,
     color: undefined,
     backgroundColor: undefined,
     textColor: undefined,
@@ -62,12 +101,12 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  /** Standard v-model event. Carries the full new list of files. */
-  "update:modelValue": [value: File[]];
-  /** Fires on any add or remove, unless the field is disabled. Carries the full new list of files. */
-  "gn-update": [payload: File[]];
-  /** Fires when a single file is removed, unless the field is disabled. Carries just that file. */
-  "gn-remove": [payload: File];
+  /** Standard v-model event. Carries the full new list of items. */
+  "update:modelValue": [value: UploadItem[]];
+  /** Fires on any add or remove, unless the field is disabled. Carries the full new list of items. */
+  "gn-update": [payload: UploadItem[]];
+  /** Fires when a single item is removed, unless the field is disabled. Carries just that item. */
+  "gn-remove": [payload: UploadItem];
 }>();
 
 const generatedId = useId();
@@ -86,15 +125,19 @@ const style = computed(() => {
   return Object.keys(overrides).length ? overrides : undefined;
 });
 
-function fileKey(file: File): string {
-  return `${file.name}::${file.size}::${file.lastModified}`;
+function fileKey(item: UploadItem): string {
+  if (item instanceof File) return `${item.name}::${item.size}::${item.lastModified}`;
+  // Descriptors identify themselves by path when they have one (the usual
+  // case — a real filesystem path is inherently unique), falling back to
+  // name+size for anything that doesn't carry a path.
+  return item.path ?? `${item.name}::${item.size ?? ""}`;
 }
 
-function dedupe(files: File[]): File[] {
-  const seen = new Map<string, File>();
-  for (const file of files) {
-    const key = fileKey(file);
-    if (!seen.has(key)) seen.set(key, file);
+function dedupe(items: UploadItem[]): UploadItem[] {
+  const seen = new Map<string, UploadItem>();
+  for (const item of items) {
+    const key = fileKey(item);
+    if (!seen.has(key)) seen.set(key, item);
   }
   return [...seen.values()];
 }
@@ -115,14 +158,16 @@ function isImage(file: File): boolean {
   return file.type.startsWith("image/");
 }
 
-// Object URLs for image previews, keyed by fileKey(), reconciled whenever
-// modelValue changes so we only ever hold URLs for files that are still selected.
+// Object URLs for image-File previews, keyed by fileKey(), reconciled
+// whenever modelValue changes so we only ever hold URLs for files that are
+// still selected. Descriptors bring their own `previewUrl` and never get an
+// entry here.
 const previewUrls = ref(new Map<string, string>());
 
 watch(
   () => props.modelValue,
-  (files) => {
-    const nextKeys = new Set(files.map(fileKey));
+  (items) => {
+    const nextKeys = new Set(items.map(fileKey));
 
     for (const [key, url] of previewUrls.value) {
       if (!nextKeys.has(key)) {
@@ -131,10 +176,10 @@ watch(
       }
     }
 
-    for (const file of files) {
-      const key = fileKey(file);
-      if (!previewUrls.value.has(key) && isImage(file)) {
-        previewUrls.value.set(key, URL.createObjectURL(file));
+    for (const item of items) {
+      const key = fileKey(item);
+      if (item instanceof File && !previewUrls.value.has(key) && isImage(item)) {
+        previewUrls.value.set(key, URL.createObjectURL(item));
       }
     }
   },
@@ -146,23 +191,28 @@ onBeforeUnmount(() => {
   previewUrls.value.clear();
 });
 
-function previewSrc(file: File): string | undefined {
-  return previewUrls.value.get(fileKey(file));
+function previewSrc(item: UploadItem): string | undefined {
+  return item instanceof File ? previewUrls.value.get(fileKey(item)) : item.previewUrl;
 }
 
-function emitUpdate(files: File[]) {
-  emit("update:modelValue", files);
-  emit("gn-update", files);
+function emitUpdate(items: UploadItem[]) {
+  emit("update:modelValue", items);
+  emit("gn-update", items);
 }
 
-function addFiles(newFiles: File[]) {
-  if (props.disabled || newFiles.length === 0) return;
-  const merged = props.multiple ? dedupe([...props.modelValue, ...newFiles]) : dedupe(newFiles).slice(0, 1);
+function addFiles(newItems: UploadItem[]) {
+  if (props.disabled || newItems.length === 0) return;
+  const merged = props.multiple ? dedupe([...props.modelValue, ...newItems]) : dedupe(newItems).slice(0, 1);
   emitUpdate(merged);
 }
 
-function openPicker() {
+async function openPicker() {
   if (props.disabled) return;
+  if (props.filePicker) {
+    const picked = await props.filePicker();
+    addFiles(picked ?? []);
+    return;
+  }
   fileInput.value?.click();
 }
 
@@ -196,10 +246,10 @@ function handleDrop(event: DragEvent) {
   addFiles(Array.from(event.dataTransfer?.files ?? []));
 }
 
-function removeFile(file: File) {
+function removeFile(item: UploadItem) {
   if (props.disabled) return;
-  const filtered = props.modelValue.filter((f) => fileKey(f) !== fileKey(file));
-  emit("gn-remove", file);
+  const filtered = props.modelValue.filter((existing) => fileKey(existing) !== fileKey(item));
+  emit("gn-remove", item);
   emitUpdate(filtered);
 }
 </script>
@@ -261,10 +311,10 @@ function removeFile(file: File) {
     </div>
 
     <ul v-if="modelValue.length" class="gn-file-upload-field__list">
-      <li v-for="file in modelValue" :key="fileKey(file)" class="gn-file-upload-field__row">
+      <li v-for="item in modelValue" :key="fileKey(item)" class="gn-file-upload-field__row">
         <img
-          v-if="previewSrc(file)"
-          :src="previewSrc(file)"
+          v-if="previewSrc(item)"
+          :src="previewSrc(item)"
           alt=""
           class="gn-file-upload-field__thumb"
         />
@@ -284,14 +334,14 @@ function removeFile(file: File) {
           />
           <path d="M15 2v5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
         </svg>
-        <span class="gn-file-upload-field__name">{{ file.name }}</span>
-        <span class="gn-file-upload-field__size">{{ formatSize(file.size) }}</span>
+        <span class="gn-file-upload-field__name">{{ item.name }}</span>
+        <span v-if="item.size !== undefined" class="gn-file-upload-field__size">{{ formatSize(item.size) }}</span>
         <button
           type="button"
           class="gn-file-upload-field__remove"
           :disabled="disabled"
-          :aria-label="`Remove ${file.name}`"
-          @click="removeFile(file)"
+          :aria-label="`Remove ${item.name}`"
+          @click="removeFile(item)"
         >
           ✕
         </button>

@@ -36,4 +36,11 @@ describe("GnTag", () => {
     const style = wrapper.attributes("style");
     expect(style === undefined || !style.includes("width")).toBe(true);
   });
+
+  it("emits gn-dblclick on double-click", async () => {
+    const wrapper = mount(GnTag);
+    await wrapper.trigger("dblclick");
+    expect(wrapper.emitted("gn-dblclick")).toHaveLength(1);
+    expect(wrapper.emitted("gn-dblclick")![0][0]).toBeInstanceOf(MouseEvent);
+  });
 });
