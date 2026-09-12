@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
+import { fn } from "storybook/test";
 import { GnTag } from "./index";
 
 const meta = {
@@ -21,7 +22,8 @@ const meta = {
     }
   },
   args: {
-    label: "Biology"
+    label: "Biology",
+    "onGn-dblclick": fn()
   },
   render: (args) => ({
     components: { GnTag },

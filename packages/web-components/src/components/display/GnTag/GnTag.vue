@@ -32,6 +32,11 @@ const props = withDefaults(
   }
 );
 
+defineEmits<{
+  /** Fires on double-click. */
+  "gn-dblclick": [payload: MouseEvent];
+}>();
+
 const style = computed(() =>
   props.color ? { "--gn-tag-accent": props.color } : undefined
 );
@@ -42,6 +47,7 @@ const style = computed(() =>
   class="gn-tag"
   :class="[`gn-tag--${variant}`]"
   :style="style"
+  @dblclick="(event: MouseEvent) => $emit('gn-dblclick', event)"
 >
   <p>{{ label }}</p>
 </div>
