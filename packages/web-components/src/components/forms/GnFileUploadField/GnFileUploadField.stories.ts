@@ -1,6 +1,34 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { fn } from "storybook/test";
 import { GnFileUploadField } from "./index";
+import type { UploadItem } from "./GnFileUploadField.vue";
+
+// Stands in for `@tauri-apps/plugin-dialog`'s `open()` — this stories file
+// runs in a plain browser and can't call the real Tauri API, but the shape
+// matches exactly: resolves a path array (or a single path, or null when the
+// user cancels).
+async function mockTauriDialogOpen(): Promise<string[] | null> {
+  return [
+    "/Users/demo/Pictures/cover-photo.png",
+    "/Users/demo/Pictures/floor-plan.png"
+  ];
+}
+
+// The pattern a real Tauri consumer writes: call the platform dialog, then
+// map the raw paths it resolves into `UploadFileDescriptor`s — `name` is the
+// only required field, derived here from the path itself since Tauri's
+// dialog doesn't hand back a separate filename; `path` is carried straight
+// through so it can be read back off modelValue/gn-update/gn-remove.
+async function selectImages(): Promise<UploadItem[]> {
+  const result = await mockTauriDialogOpen();
+  if (result === null) return [];
+
+  const paths = Array.isArray(result) ? result : [result];
+  return paths.map((path) => ({
+    name: path.split(/[\\/]/).pop() ?? path,
+    path
+  }));
+}
 
 // A minimal 1x1 transparent PNG, used so preview stories can show a real
 // decodable image thumbnail instead of a broken-image icon.
@@ -132,22 +160,13 @@ export const CustomAccent: Story = {
 export const CustomFilePicker: Story = {
   args: {
     label: "Upload images (custom picker)",
-    // Stands in for a platform dialog — e.g. Tauri's `@tauri-apps/plugin-dialog`
-    // `open()` — that resolves real filesystem paths instead of browser Files.
-    filePicker: async () => [
-      {
-        name: "cover-photo.png",
-        path: "/Users/demo/Pictures/cover-photo.png",
-        previewUrl: `data:image/png;base64,${ONE_PIXEL_PNG_BASE64}`,
-        size: 482_000
-      }
-    ]
+    filePicker: selectImages
   },
   parameters: {
     docs: {
       description: {
         story:
-          "The `filePicker` prop replaces the built-in native file input with any async function — e.g. one wrapping a Tauri dialog that resolves real paths. Click the dropzone to run it. Returned items only need `name`; `path`/`previewUrl`/`size` are optional and carried straight through to `modelValue`/`gn-update`/`gn-remove` so the consumer can read the platform-specific path back out."
+          "The `filePicker` prop replaces the built-in native file input with any async function — here, one modeled on a real Tauri consumer: call `@tauri-apps/plugin-dialog`'s `open()` (mocked in this story, since Storybook runs in a plain browser), then map the raw paths it resolves into `UploadFileDescriptor`s. Click the dropzone to run it. Only `name` is required; `path`/`previewUrl`/`size` are optional and carried straight through to `modelValue`/`gn-update`/`gn-remove` so the consumer can read the platform-specific path back out."
       }
     }
   }
