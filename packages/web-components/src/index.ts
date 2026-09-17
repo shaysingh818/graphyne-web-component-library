@@ -6,7 +6,7 @@ import "./styles/shared.css";
 import { GnButton, GnIconButton } from "./components/buttons";
 import { GnCard, GnListTile, GnMetricCard } from "./components/layout";
 import { GnFormInputField, GnFormDropDownField, GnSearchFormField, GnFormTextField, GnFileUploadField } from "./components/forms";
-import { GnNavigationItem, GnNavigationHeader, GnNavigationBar, GnTabNavigationBar, GnTabNavigationItem, GnBackBar } from "./components/navigation";
+import { GnNavigationItem, GnNavigationHeader, GnNavigationBar, GnTabNavigationBar, GnTabNavigationItem, GnBackBar, GnDropDownMenu, GnDropDownMenuItem } from "./components/navigation";
 import { GnBarChart, GnDoughnutChart, GnLineChart, GnPieChart } from "./components/charts";
 import { GnTag } from "./components/display";
 import { GnConfirmDialog } from "./components/overlays";
@@ -47,6 +47,8 @@ export default {
     app.component("GnTabNavigationBar", GnTabNavigationBar);
     app.component("GnTabNavigationItem", GnTabNavigationItem);
     app.component("GnBackBar", GnBackBar);
+    app.component("GnDropDownMenu", GnDropDownMenu);
+    app.component("GnDropDownMenuItem", GnDropDownMenuItem);
     app.component("GnBarChart", GnBarChart);
     app.component("GnDoughnutChart", GnDoughnutChart);
     app.component("GnLineChart", GnLineChart);
