@@ -63,6 +63,9 @@ const meta = {
     direction: {
       control: "select",
       options: ["col", "row"]
+    },
+    collapseAt: {
+      control: "number"
     }
   },
   args: {
@@ -208,6 +211,49 @@ export const WithTrailingIcons: Story = {
       description: {
         story:
           "The `trailing` slot is pushed to the far end of the bar (right in a row, bottom in a column) — useful for a row of account/settings icon buttons. Each `GnIconButton` needs its own `label` (used as `aria-label`, since it has no visible text) and an icon passed into its default slot."
+      }
+    }
+  }
+};
+
+export const MobileTopBar: Story = {
+  args: { direction: "row", backgroundColor: "#111827" },
+  decorators: [
+    () => ({
+      // Constrains the bar to a phone-sized width so the collapsed layout
+      // shows without resizing the browser. GnNavigationBar measures its own
+      // width (not the viewport), so this is all it takes.
+      template: `<div style="width: 375px; max-width: 100%;"><story /></div>`
+    })
+  ],
+  render: (args) => ({
+    components: { GnNavigationBar, GnNavigationHeader, GnNavigationItem, GnIconButton },
+    setup() {
+      return { args, logoIcon, homeIcon, searchIcon, settingsIcon, userIcon };
+    },
+    template: `
+      <GnNavigationBar v-bind="args">
+        <template #header>
+          <GnNavigationHeader title="Graphyne" direction="row"><span v-html="logoIcon" /></GnNavigationHeader>
+        </template>
+        <template #items>
+          <GnNavigationItem label="Home" direction="row"><span v-html="homeIcon" /></GnNavigationItem>
+          <GnNavigationItem label="Search" direction="row"><span v-html="searchIcon" /></GnNavigationItem>
+        </template>
+        <template #trailing>
+          <div style="display: flex; gap: 0.5rem;">
+            <GnIconButton label="Settings" variant="ghost" size="md"><span v-html="settingsIcon" /></GnIconButton>
+            <GnIconButton label="Account" variant="ghost" size="md"><span v-html="userIcon" /></GnIconButton>
+          </div>
+        </template>
+      </GnNavigationBar>
+    `
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A row bar narrower than `collapseAt` (640px by default) collapses for mobile: the header stays put, a menu toggle appears at the far end, and the items + trailing content move into a stacked panel below the bar. The panel closes on Escape, on picking a nav item, or when the bar widens past the breakpoint again. Set `collapseAt` to 0 to opt out, swap the hamburger glyph via the `menu-icon` slot, and listen for `gn-menu-toggle` to react to the open state."
       }
     }
   }
